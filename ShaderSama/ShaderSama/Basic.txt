@@ -1,0 +1,14 @@
+#version 450
+
+layout(location = 0) out vec4 fsout_Color;
+
+layout(set = 0, binding = 0) uniform Params {
+    float iTime;
+    vec2 iResolution;
+};
+
+void main()
+{
+    vec2 uv = gl_FragCoord.xy / iResolution.xy;
+    fsout_Color = vec4(uv, 0.5 + 0.5 * sin(iTime), 1.0);
+}
