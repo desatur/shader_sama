@@ -18,7 +18,6 @@ namespace ShaderSama
         private Pipeline _pipeline;
         private ResourceLayout _resourceLayout;
         private ResourceSet _resourceSet;
-        private float _time;
 
         public Renderer()
         {
@@ -72,14 +71,12 @@ namespace ShaderSama
 
         public void Draw()
         {
-            _time += Logic.Singleton.DeltaTime;
-
             Vector2 resolution = new Vector2(
                 GraphicsDeviceInstance.SwapchainFramebuffer.Width,
                 GraphicsDeviceInstance.SwapchainFramebuffer.Height);
 
             // Update uniform buffer
-            GraphicsDeviceInstance.UpdateBuffer(_paramBuffer, 0, _time);
+            GraphicsDeviceInstance.UpdateBuffer(_paramBuffer, 0, Logic.Singleton.Time);
             GraphicsDeviceInstance.UpdateBuffer(_paramBuffer, 4, resolution);
 
             _commandList.Begin();
