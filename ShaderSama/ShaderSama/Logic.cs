@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using ShaderSama.Rendering;
 
 namespace ShaderSama
 {
@@ -26,7 +27,6 @@ namespace ShaderSama
                 DeltaTime = (currentTime - lastTime) / 1000f;
                 Time += DeltaTime;
                 lastTime = currentTime;
-
                 var events = Window.Singleton.Base.PumpEvents();
                 Renderer.Singleton.Draw();
             }

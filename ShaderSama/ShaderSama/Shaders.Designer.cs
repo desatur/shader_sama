@@ -81,5 +81,63 @@ namespace ShaderSama {
                 return ResourceManager.GetString("Basic", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #version 450
+        ///
+        ///layout(location = 0) out vec4 fsout_Color;
+        ///
+        ///layout(set = 0, binding = 0) uniform Params {
+        ///    float iTime;
+        ///    vec2 iResolution;
+        ///};
+        ///
+        ///float sun(vec2 uv, float battery)
+        ///{
+        /// 	float val = smoothstep(0.3, 0.29, length(uv));
+        /// 	float bloom = smoothstep(0.7, 0.0, length(uv));
+        ///    float cut = 3.0 * sin((uv.y + iTime * 0.2 * (battery + 0.02)) * 100.0) 
+        ///				+ clamp(uv.y * 14.0 + 1.0, -6.0, 6.0);
+        ///    cut = clamp(cut, 0.0, 1.0);
+        ///    return clamp(val * cut, 0.0, 1.0) + bloom * 0.6;
+        ///}
+        ///
+        ///floa [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CyberFuji {
+            get {
+                return ResourceManager.GetString("CyberFuji", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #version 450
+        ///
+        ///layout(location = 0) out vec4 fsout_Color;
+        ///
+        ///layout(set = 0, binding = 0) uniform Params {
+        ///    float iTime;
+        ///    vec2 iResolution;
+        ///};
+        ///
+        ///void main()
+        ///{
+        ///    vec2 uv = gl_FragCoord.xy / iResolution.xy;
+        ///    vec2 p = uv * 2.0 - 1.0; // center the coordinates
+        ///
+        ///    float t = iTime * 0.5;
+        ///
+        ///    float r = 0.5 + 0.5 * sin(10.0 * p.x + t);
+        ///    float g = 0.5 + 0.5 * sin(10.0 * p.y + t + 2.0);
+        ///    float b = 0.5 + 0.5 * sin(10.0 * (p.x + p.y) + t + 4.0);
+        ///
+        ///    float wave = sin(10.0 * length(p) - t * 5.0);
+        ///    wav [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string LSD {
+            get {
+                return ResourceManager.GetString("LSD", resourceCulture);
+            }
+        }
     }
 }

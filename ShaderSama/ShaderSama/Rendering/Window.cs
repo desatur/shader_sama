@@ -2,13 +2,13 @@
 using Veldrid.Sdl2;
 using Veldrid.StartupUtilities;
 
-namespace ShaderSama
+namespace ShaderSama.Rendering
 {
     public class Window
     {
         public static Window Singleton { get; private set; }
-        public Sdl2Window Base {  get; private set; }
-        public Vector2 Size
+        public Sdl2Window Base { get; private set; }
+        public Vector2 GetSize
         {
             get
             {
