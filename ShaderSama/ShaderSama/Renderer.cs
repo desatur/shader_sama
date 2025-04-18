@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using System.Text;
+﻿using System.Text;
 using Veldrid;
 using Veldrid.SPIRV;
 using Veldrid.StartupUtilities;
@@ -10,6 +9,7 @@ namespace ShaderSama
     {
         public static Renderer Singleton { get; private set; }
         public GraphicsDevice GraphicsDeviceInstance { get; private set; }
+        public RgbaFloat ClearColor = RgbaFloat.Black;
 
         private ResourceFactory _factory;
         private CommandList _commandList;
@@ -47,8 +47,7 @@ namespace ShaderSama
 
         private void CreateResources()
         {
-            // Uniform buffer
-            _paramBuffer = _factory.CreateBuffer(new BufferDescription(16, BufferUsage.UniformBuffer | BufferUsage.Dynamic));
+            _paramBuffer = _factory.CreateBuffer(new BufferDescription(16, BufferUsage.UniformBuffer | BufferUsage.Dynamic)); // Uniform buffer
 
             // Shader loading
             _shaders = _factory.CreateFromSpirv(
@@ -69,9 +68,9 @@ namespace ShaderSama
                 DepthStencilState = DepthStencilStateDescription.Disabled,
                 RasterizerState = new RasterizerStateDescription(FaceCullMode.None, PolygonFillMode.Solid, FrontFace.Clockwise, true, false),
                 PrimitiveTopology = PrimitiveTopology.TriangleStrip,
-                ResourceLayouts = new[] { _resourceLayout },
+                ResourceLayouts = [_resourceLayout],
                 ShaderSet = new ShaderSetDescription(
-                    vertexLayouts: Array.Empty<VertexLayoutDescription>(),
+                    vertexLayouts: [],
                     shaders: _shaders),
                 Outputs = GraphicsDeviceInstance.SwapchainFramebuffer.OutputDescription
             };
@@ -87,7 +86,7 @@ namespace ShaderSama
 
             _commandList.Begin();
             _commandList.SetFramebuffer(GraphicsDeviceInstance.SwapchainFramebuffer);
-            _commandList.ClearColorTarget(0, RgbaFloat.Black);
+            _commandList.ClearColorTarget(0, ClearColor);
 
             _commandList.SetPipeline(_pipeline);
             _commandList.SetGraphicsResourceSet(0, _resourceSet);
@@ -96,6 +95,15 @@ namespace ShaderSama
             _commandList.End();
             GraphicsDeviceInstance.SubmitCommands(_commandList);
             GraphicsDeviceInstance.SwapBuffers();
+        }
+        private void ResizeGraphicsDeviceCheck()
+        {
+            if (_windowResized)
+            {
+                _windowResized = false;
+                var size = Window.Singleton.Size;
+                GraphicsDeviceInstance.ResizeMainWindow((uint)Window.Singleton.Size.X, (uint)Window.Singleton.Size.Y);
+            }
         }
 
         // Vertex shader (fullscreen triangle)
@@ -111,16 +119,5 @@ namespace ShaderSama
             );
             gl_Position = vec4(pos[gl_VertexIndex], 0.0, 1.0);
         }";
-
-
-        private void ResizeGraphicsDeviceCheck()
-        {
-            if (_windowResized)
-            {
-                _windowResized = false;
-                var size = Window.Singleton.Size;
-                GraphicsDeviceInstance.ResizeMainWindow((uint)Window.Singleton.Size.X, (uint)Window.Singleton.Size.Y);
-            }
-        }
     }
 }
