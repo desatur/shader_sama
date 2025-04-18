@@ -19,6 +19,9 @@ namespace ShaderSama
         private ResourceLayout _resourceLayout;
         private ResourceSet _resourceSet;
 
+        private event Action? Resized;
+        private bool _windowResized = false;
+
         public Renderer()
         {
             Singleton ??= this;
@@ -30,6 +33,13 @@ namespace ShaderSama
                 PreferDepthRangeZeroToOne = true
             };
             GraphicsDeviceInstance = VeldridStartup.CreateGraphicsDevice(Window.Singleton.Base, options);
+
+            Window.Singleton.Base.Resized += () =>
+            {
+                _windowResized = true;
+                Resized?.Invoke();
+            };
+
             _factory = GraphicsDeviceInstance.ResourceFactory;
 
             CreateResources();
@@ -71,13 +81,9 @@ namespace ShaderSama
 
         public void Draw()
         {
-            Vector2 resolution = new Vector2(
-                GraphicsDeviceInstance.SwapchainFramebuffer.Width,
-                GraphicsDeviceInstance.SwapchainFramebuffer.Height);
-
-            // Update uniform buffer
+            ResizeGraphicsDeviceCheck();
             GraphicsDeviceInstance.UpdateBuffer(_paramBuffer, 0, Logic.Singleton.Time);
-            GraphicsDeviceInstance.UpdateBuffer(_paramBuffer, 4, resolution);
+            GraphicsDeviceInstance.UpdateBuffer(_paramBuffer, 4, Window.Singleton.Size);
 
             _commandList.Begin();
             _commandList.SetFramebuffer(GraphicsDeviceInstance.SwapchainFramebuffer);
@@ -105,5 +111,16 @@ namespace ShaderSama
             );
             gl_Position = vec4(pos[gl_VertexIndex], 0.0, 1.0);
         }";
+
+
+        private void ResizeGraphicsDeviceCheck()
+        {
+            if (_windowResized)
+            {
+                _windowResized = false;
+                var size = Window.Singleton.Size;
+                GraphicsDeviceInstance.ResizeMainWindow((uint)Window.Singleton.Size.X, (uint)Window.Singleton.Size.Y);
+            }
+        }
     }
 }
