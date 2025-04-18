@@ -103,6 +103,7 @@ namespace ShaderSama
                 _windowResized = false;
                 var size = Window.Singleton.Size;
                 GraphicsDeviceInstance.ResizeMainWindow((uint)Window.Singleton.Size.X, (uint)Window.Singleton.Size.Y);
+                GraphicsDeviceInstance.UpdateBuffer(_paramBuffer, 4, Window.Singleton.Size);
             }
         }
 
